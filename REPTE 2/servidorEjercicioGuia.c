@@ -1,4 +1,4 @@
-#include <string.h>
+l#include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -8,7 +8,8 @@
 #include <ctype.h> // per realitzar l'exercici de majuscules'
 #include <stdlib.h>
 
-
+// Estructura necesaria para acceso excluyente
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int main(int argc, char *argv[])
 {
@@ -81,8 +82,10 @@ int main(int argc, char *argv[])
 				terminar=1;
 			else // conversion Celsisus a Fahrenheit
 			{
+				pthread_mutex_lock( &mutex ); // No me interrumpas
 				int T_fahrenheit = (temperatura - 32)/1.8f;
 				sprintf (respuesta,"La temperatura en Fahrenheit es: %f",T_fahrenheit);
+				pthread_mutex_unlock( &mutex ); // Ya me puedes interrumpir
 			}
 			
 			if (codigo !=0)
